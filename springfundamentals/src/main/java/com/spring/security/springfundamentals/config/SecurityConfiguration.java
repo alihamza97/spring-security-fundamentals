@@ -15,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -42,9 +43,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.httpBasic();
-		// allow authenticate requests
-		http.authorizeRequests().anyRequest().authenticated();
+//		http.formLogin();
 
+		// allow authenticate requests
+//		http.authorizeRequests().anyRequest().authenticated();
+		http.authorizeRequests().antMatchers("/hello").authenticated();
+		http.addFilterBefore(new SecurityFilter(), BasicAuthenticationFilter.class);
 	}
 
 //	@Bean
@@ -61,7 +65,5 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 //		return http.build();
 //
 //	}
-
-	
 
 }
